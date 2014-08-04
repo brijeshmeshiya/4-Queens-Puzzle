@@ -4,6 +4,9 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
+import java.awt.Button;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class gui {
@@ -12,7 +15,7 @@ public class gui {
 		board.setResizable(false);
 		board.getContentPane().setBackground(Color.WHITE);
 		board.setTitle("4 Queen Puzzle");
-		board.setSize(355,388);
+		board.setSize(355,425);
 		board.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("1");
@@ -111,6 +114,24 @@ public class gui {
 		label_14.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		label_14.setBounds(12, 258, 84, 84);
 		board.getContentPane().add(label_14);
+		
+		final Button button = new Button("Start");
+		button.setName("Start");
+		button.setBounds(135, 360, 88, 25);
+		board.getContentPane().add(button);
+		
+		// Listener
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				// start calculation
+				if(button.getLabel().equalsIgnoreCase("start")==true){
+					button.setLabel("Stop");
+				}
+				else{
+					button.setLabel("Start");
+				}
+			}
+		});
 		
 		board.setVisible(true);
 	}
