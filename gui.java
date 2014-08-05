@@ -151,10 +151,13 @@ public class gui {
 		{
 			if(chess[i][current]==false)
 			{
-				//transform(temp,chess,current,i,row);
+				transform(temp,chess,current,i,row);
 				find_queen(temp,current+1,row,queen-1,position+"("+(i+48)+","+(current+48)+") ");
 			}
 		}
+		
+	}
+	private void transform(boolean[][] temp, boolean[][] chess, int current,	int i, int row) {
 		
 	}
 }
