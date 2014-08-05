@@ -136,7 +136,25 @@ public class gui {
 		
 		board.setVisible(true);
 	}
-	public void calculation(){
+	public void find_queen(boolean chess[][],int current,int row,int queen,String position){
 		// To calculate solution
+		int i,j,k;
+		boolean[][] temp = new boolean[10][10];
+		if(queen<0 || current>row)
+			return;
+		if(queen==0)
+		{
+			System.out.println(position);
+			return;
+		}
+		for(i=0;i<row;i++)
+		{
+			if(chess[i][current]==false)
+			{
+				//transform(temp,chess,current,i,row);
+				find_queen(temp,current+1,row,queen-1,position+"("+(i+48)+","+(current+48)+") ");
+			}
+		}
+		
 	}
 }
