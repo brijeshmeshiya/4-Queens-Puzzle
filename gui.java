@@ -121,10 +121,16 @@ public class gui {
 		button.setBounds(135, 360, 88, 25);
 		board.getContentPane().add(button);
 		
+		System.out.println("Started");
+		boolean[][] square=new boolean[4][4];
+		int row=4,column=row;
+		find_queen(square,0,row,row,"");
+		
 		// Listener
 		button.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				// start calculation
+				
 				if(button.getLabel().equalsIgnoreCase("start")==true){
 					button.setLabel("Stop");
 				}
@@ -144,20 +150,51 @@ public class gui {
 			return;
 		if(queen==0)
 		{
+			System.out.println("Got Solution");
 			System.out.println(position);
 			return;
 		}
+		System.out.println("Executing "+queen);
 		for(i=0;i<row;i++)
 		{
 			if(chess[i][current]==false)
 			{
+				print(chess,row,"Original : ");
 				transform(temp,chess,current,i,row);
+				print(temp,row,"Modified : ");
 				find_queen(temp,current+1,row,queen-1,position+"("+(i+48)+","+(current+48)+") ");
 			}
 		}
 		
 	}
-	private void transform(boolean[][] temp, boolean[][] chess, int current,	int i, int row) {
-		
+	public void transform(boolean[][] temp, boolean[][] chess, int r,int c, int row) {
+		int i,j,k;
+		for(i=0;i<row;i++)
+			for(j=0;j<row;j++)
+			{
+				temp[i][j]=chess[i][j];
+				if(i==r || j==c)
+					temp[i][j]=true;
+				else if(Math.abs(r-i)==Math.abs(c-j))
+					temp[i][j]=true;
+			}
+		return;
+	}
+	
+	public void print(boolean[][] temp,int row,String msg)
+	{
+		int i,j;
+		System.out.println(msg);
+		for(i=0;i<row;i++)
+		{
+			for(j=0;j<row;j++)
+			{
+				if(temp[i][j]==true)
+					System.out.print("1 ");
+				else
+					System.out.print("0 ");
+			}
+		System.out.println();
+		}
 	}
 }
