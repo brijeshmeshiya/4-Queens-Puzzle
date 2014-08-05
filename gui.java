@@ -7,12 +7,15 @@ import javax.swing.border.LineBorder;
 import java.awt.Button;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Label;
 
 
 public class gui {
 		JLabel[][] cell = new JLabel[4][4];
-	public gui(){
 		JFrame board = new JFrame();
+		int flag;
+	public gui(){
+		
 		board.setResizable(false);
 		board.getContentPane().setBackground(Color.WHITE);
 		board.setTitle("4 Queen Puzzle");
@@ -113,19 +116,15 @@ public class gui {
 		cell[3][3].setHorizontalAlignment(SwingConstants.CENTER);
 		cell[3][3].setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		cell[3][3].setBounds(12, 258, 84, 84);
-		board.add(cell[3][3]);
+		cell[3][3].setBackground(Color.GREEN);
+		board.getContentPane().add(cell[3][3]);
 		
-		/*JLabel label_14 = new JLabel("");
-		label_14.setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
-		label_14.setHorizontalAlignment(SwingConstants.CENTER);
-		label_14.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		label_14.setBounds(12, 258, 84, 84);
-		board.getContentPane().add(label_14);*/
 		
 		final Button button = new Button("Start");
 		button.setName("Start");
 		button.setBounds(135, 360, 88, 25);
 		board.getContentPane().add(button);
+		
 		
 		
 		// Listener
@@ -136,9 +135,11 @@ public class gui {
 				if(button.getLabel().equalsIgnoreCase("start")==true){
 					System.out.println("Started");
 					boolean[][] square=new boolean[4][4];
+					int[][] position = new int[4][2];
 					int row=4,column=row;
-					find_queen(square,0,row,row,"");
+					find_queen(square,0,row,row,position);
 					button.setLabel("Stop");
+					flag=0;
 				}
 				else{
 					button.setLabel("Start");
@@ -148,7 +149,7 @@ public class gui {
 		
 		board.setVisible(true);
 	}
-	public void find_queen(boolean chess[][],int current,int row,int queen,String position){
+	public void find_queen(boolean chess[][],int current,int row,int queen,int[][] position){
 		// To calculate solution
 		int i,j,k;
 		//System.out.println(position);
@@ -158,27 +159,37 @@ public class gui {
 		if(queen==0)
 		{
 			//System.out.println("Got Solution");
-			System.out.println(position);
-			//return;
+			if(flag==0){
+				for(int x=0;x<4;x++)
+					cell[position[x][0]][position[x][1]].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
+				flag=1;
+			}
+			//System.out.println(position);
+			return;
 		}
 		//System.out.println("Executing "+queen);
 		for(i=0;i<row;i++)
 		{
 			if(chess[current][i]==false)
 			{
-				cell[current][i].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
 				this.sleep(10);
+				cell[current][i].repaint();
+				board.repaint();
+				position[current][0]=current;
+				position[current][1]=i;
 				//print(chess,row,"Original : ");
 				transform(temp,chess,current,i,row);
 				//print(temp,row,"Modified : ");
-				find_queen(temp,current+1,row,queen-1,position+"("+(i)+","+(current)+") ");
+//				find_queen(temp,current+1,row,queen-1,position+"("+(i)+","+(current)+") ");
+				find_queen(temp,current+1,row,queen-1,position);
+
 			}
 		}
 		
 	}
 	
 	private void sleep(int i) {
-		for(float j=0;j<i*1000000;j++)
+		for(float j=0;j<i*100000;)
 		{
 			j=(float) (j+0.1);
 		}
@@ -194,6 +205,11 @@ public class gui {
 					temp[i][j]=true;
 				else if(Math.abs(r-i)==Math.abs(c-j))
 					temp[i][j]=true;
+				if(temp[i][j]==true)
+					cell[i][j].setBackground(Color.RED);
+				else
+					cell[0][0].setBackground(Color.green);
+				cell[0][0].repaint();
 			}
 		return;
 	}
