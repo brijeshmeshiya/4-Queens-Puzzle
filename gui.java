@@ -10,10 +10,11 @@ import java.awt.event.MouseEvent;
 import java.awt.Label;
 
 
-public class gui {
+public class gui extends calculation {
 		JLabel[][] cell = new JLabel[4][4];
 		JFrame board = new JFrame();
 		int flag;
+		calculation c1 = new calculation();
 	public gui(){
 		
 		board.setResizable(false);
@@ -116,7 +117,6 @@ public class gui {
 		cell[3][3] = new JLabel("");
 		cell[3][3].setHorizontalAlignment(SwingConstants.CENTER);
 		cell[3][3].setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		cell[3][3].setBackground(Color.GREEN);
 		//board.getContentPane().add(cell[3][3]);
 		
 		cell[3][3].setBounds(258, 258, 84, 84);
@@ -129,6 +129,8 @@ public class gui {
 			for(int j=0;j<4;j++)
 			{
 				board.getContentPane().add(cell[i][j]);
+				cell[i][j].setOpaque(true);
+				c1.cell[i][j]=cell[i][j];
 			}
 		}
 		
@@ -137,7 +139,7 @@ public class gui {
 		button.setBounds(135, 360, 88, 25);
 		board.getContentPane().add(button);
 		
-		
+		c1.start();
 		
 		// Listener
 		button.addMouseListener(new MouseAdapter() {
@@ -148,8 +150,13 @@ public class gui {
 					System.out.println("Started");
 					boolean[][] square=new boolean[4][4];
 					int[][] position = new int[4][2];
+					cell[0][0].setBackground(Color.RED);
 					int row=4,column=row;
-					find_queen(square,0,row,row,position);
+					try {
+						find_queen(square,0,row,row,position);
+					} catch (InterruptedException e1) {
+						System.out.println("Error in Listener");
+					}
 					button.setLabel("Stop");
 					flag=0;
 				}
@@ -161,7 +168,7 @@ public class gui {
 		
 		board.setVisible(true);
 	}
-	public void find_queen(boolean chess[][],int current,int row,int queen,int[][] position){
+	public void find_queen(boolean chess[][],int current,int row,int queen,int[][] position) throws InterruptedException{
 		// To calculate solution
 		int i,j,k;
 		//System.out.println(position);
@@ -173,7 +180,7 @@ public class gui {
 			//System.out.println("Got Solution");
 			if(flag==0){
 				for(int x=0;x<4;x++)
-					cell[position[x][0]][position[x][1]].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
+					//cell[position[x][0]][position[x][1]].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
 				flag=1;
 			}
 			//System.out.println(position);
@@ -184,48 +191,109 @@ public class gui {
 		{
 			if(chess[current][i]==false)
 			{
-				this.sleep(10);
-				cell[current][i].repaint();
-				board.repaint();
+				System.out.println("Sleeping");
 				position[current][0]=current;
 				position[current][1]=i;
+				c1.qe.add(current);
+				c1.qe.add(i);
+				c1.qe.add(1);
 				//print(chess,row,"Original : ");
 				transform(temp,chess,current,i,row);
 				//print(temp,row,"Modified : ");
 //				find_queen(temp,current+1,row,queen-1,position+"("+(i)+","+(current)+") ");
 				find_queen(temp,current+1,row,queen-1,position);
-
+				restore(temp,chess,current,i,row);
+				c1.qe.add(current);
+				c1.qe.add(i);
+				c1.qe.add(3);
 			}
 		}
 		
 	}
 	
-	private void sleep(int i) {
-		for(float j=0;j<i*100000;)
-		{
-			j=(float) (j+0.1);
-		}
+	public void restore(boolean[][] temp, boolean[][] chess, int r,int c, int row)
+	{
+		int i,j,k;
+		for(i=0;i<row;i++)
+			for(j=0;j<row;j++)
+			{
+				if(chess[i][j]!=temp[i][j])
+				{
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(2);
+				}
+			}
 	}
 	
-	public void transform(boolean[][] temp, boolean[][] chess, int r,int c, int row) {
+	public void transform(boolean[][] temp, boolean[][] chess, int r,int c, int row) throws InterruptedException {
 		int i,j,k;
 		for(i=0;i<row;i++)
 			for(j=0;j<row;j++)
 			{
 				temp[i][j]=chess[i][j];
-				if(i==r || j==c)
+				if(i==r ){
 					temp[i][j]=true;
+					if(chess[i][j]!=true)
+					{
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(0);
+					}
+				}
 				else if(Math.abs(r-i)==Math.abs(c-j))
+				{
 					temp[i][j]=true;
-				if(temp[i][j]==true)
-					cell[i][j].setBackground(Color.RED);
-				else
-					cell[0][0].setBackground(Color.green);
-				cell[0][0].repaint();
+					if(chess[i][j]!=true)
+					{
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(0);
+					}
+				}
+			}
+		for(i=0;i<row;i++)
+			for(j=0;j<row;j++)
+			{
+				if(j==c){
+					temp[i][j]=true;
+					if(chess[i][j]!=true)
+					{
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(0);
+					}
+				}
+				else if(Math.abs(r-i)==Math.abs(c-j))
+				{
+					temp[i][j]=true;
+					if(chess[i][j]!=true)
+					{
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(0);
+					}
+				}
+			}
+		for(i=0;i<row;i++)
+			for(j=0;j<row;j++)
+			{
+				if(Math.abs(r-i)==Math.abs(c-j))
+				{
+					temp[i][j]=true;
+					c1.qe.add(i);
+					c1.qe.add(j);
+					c1.qe.add(0);
+				}
 			}
 		return;
 	}
 	
+	private void hold(int i) {
+		float x=0;
+		while(x<1000000)
+			x=(float) (x+0.1);
+	}
 	public void print(boolean[][] temp,int row,String msg)
 	{
 		int i,j;
