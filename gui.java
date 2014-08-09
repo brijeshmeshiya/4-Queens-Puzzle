@@ -180,6 +180,12 @@ public class gui extends calculation {
 			//System.out.println("Got Solution");
 			if(flag==0){
 				for(int x=0;x<4;x++)
+				{
+					c1.qe.add(position[x][0]);
+					c1.qe.add(position[x][1]);
+					c1.qe.add(1);
+				}
+				c1.qe.add(-1);
 					//cell[position[x][0]][position[x][1]].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
 				flag=1;
 			}
