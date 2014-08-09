@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -7,51 +9,44 @@ import javax.swing.JLabel;
 public class calculation extends Thread{
 	JLabel[][] cell = new JLabel[4][4];
 	int[][] board =new int[4][4];
+	Queue<Integer> qe = new LinkedList<Integer>();
+	int var1,var2,var3;
 	public void run()
 	{
-	for(int i=0;i<4;i++)
+	while(true)
 	{
-	for(int j=0;j<4;j++)
+	if(qe.isEmpty()==false)
 	{
-		board[i][j]=3;
-	}
-	}
-	while(true){
-	for(int i=0;i<4;i++)
-	{
-		for(int j=0;j<4;j++)
+		if(qe.peek()==-1)
+			return;
+		var1=qe.peek();
+		qe.poll();
+		var2=qe.peek();
+		qe.poll();
+		var3=qe.peek();
+		qe.poll();
+		if(var3==0)
 		{
-			if(board[i][j]==1)
-			{
-				cell[i][j].setBackground(Color.GREEN);
-				cell[i][j].setIcon(null);
-			}
-			else if(board[i][j]==0)
-			{
-				cell[i][j].setBackground(Color.RED);
-				cell[i][j].setIcon(null);
-			}
-			else if(board[i][j]==2)
-			{
-				cell[i][j].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
-			}
-			else if(board[i][j]==3)
-			{
-				cell[i][j].setBackground(null);
-				cell[i][j].setIcon(null);
-			}
-			try {
-				sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}}
+			cell[var1][var2].setBackground(Color.RED);
+			//cell[var1][var2].setIcon(null);
+		}
+		else if(var3==1)
+		{
+			cell[var1][var2].setBackground(Color.GREEN);
+			cell[var1][var2].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
+		}
+		else if(var3==2)
+		{
+			cell[var1][var2].setBackground(null);
+			cell[var1][var2].setIcon(null);
+		}
 		}
 	try {
-		sleep(1000);
+		sleep(100);
 	} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	}}
+	}
+	}
 }
