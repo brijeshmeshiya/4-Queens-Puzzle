@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -147,7 +148,7 @@ public class gui extends calculation {
 				// start calculation
 				
 				if(button.getLabel().equalsIgnoreCase("start")==true){
-					System.out.println("Started");
+					//System.out.println("Started");
 					boolean[][] square=new boolean[4][4];
 					int[][] position = new int[4][2];
 					cell[0][0].setBackground(Color.RED);
@@ -185,9 +186,10 @@ public class gui extends calculation {
 					c1.qe.add(position[x][1]);
 					c1.qe.add(1);
 				}
-				c1.qe.add(-1);
+				c1.qe.add(10);	// Solution Found
+				//c1.qe.add(-1);
 					//cell[position[x][0]][position[x][1]].setIcon(new ImageIcon("/home/brijesh/Desktop/queen-resized.png"));
-				flag=1;
+				//flag=1;
 			}
 			//System.out.println(position);
 			return;
@@ -197,7 +199,7 @@ public class gui extends calculation {
 		{
 			if(chess[current][i]==false)
 			{
-				System.out.println("Sleeping");
+				//System.out.println("Sleeping");
 				position[current][0]=current;
 				position[current][1]=i;
 				c1.qe.add(current);
