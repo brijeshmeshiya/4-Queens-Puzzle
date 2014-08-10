@@ -4,6 +4,7 @@ import java.util.Queue;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 public class calculation extends Thread{
@@ -18,7 +19,15 @@ public class calculation extends Thread{
 	if(qe.isEmpty()==false)
 	{
 		if(qe.peek()==-1)
+		{
+			JOptionPane.showMessageDialog(null, "Done");
 			return;
+		}
+		if(qe.peek()==10)
+		{
+			JOptionPane.showMessageDialog(null, "Solution Found !");
+			qe.poll();
+		}
 		var1=qe.peek();
 		qe.poll();
 		var2=qe.peek();
@@ -42,7 +51,7 @@ public class calculation extends Thread{
 		}
 		}
 	try {
-		sleep(100);
+		sleep(50);
 	} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
